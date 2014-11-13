@@ -1,0 +1,48 @@
+Cryptographic libraries for ubuntu
+
+To install pbc,
+>> PBC library depends on
+	>M4
+	>GMP Library
+	>Flex
+	>bison
+
+Install M4,flex, and bison through apt-get
+$ sudo apt-get install M4
+$ sudo apt-get install flex
+$ sudo apt-get install bison
+
+To install GMP library, download the library from https://gmplib.org as zip file.
+unzip the file, and follow:
+$ ./configure
+$ make
+$ make check
+$ sudo make install
+
+Now, it's time to install PBC.
+download zip file from http://crypto.stanford.edu/pbc/download.html
+unzip the file, and follow:
+$ ./configure
+$ make
+$ sudo make install
+// this will create a native library file /usr/local/lib/libpbc.so
+
+To install jPBC and use in Java, we need to create native library, for this we need to create libjpbc-pbc.so file for linux. For this, we need to install cmake, and make.
+$ sudo apt-get install make
+$ sudo apt-get install cmake
+$ sudo apt-get install cmake-curses-gui
+
+Now, download jPBC from 
+http://gas.dia.unisa.it/projects/jpbc/download.html OR http://sourceforge.net/projects/jpbc/files/
+I'm using version 1.2.1 (not the latest one 2.0.0), because cpabe library uses 1.2.1 version.
+Unzip the file, and follow:
+// go to jpbc-pbc dir
+$ cd <jpbc>/jpb-pbc
+$ ccmake .
+$ make
+//This will create native library libjpbc-pbc.so in build directory
+$ sudo cp build/libjpbc-pbc.so /usr/local/lib/libjpbc-pbc.so
+
+Finally, install cpabe
+
+

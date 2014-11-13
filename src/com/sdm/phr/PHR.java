@@ -27,8 +27,8 @@ public class PHR {
         String encfile = "data/input.pdf.enc";
         String decfile = "data/output.pdf";
 
-        String user_attr = nurse1_attr;
-//        String user_attr = doctor1_attr;
+//        String user_attr = nurse1_attr;
+        String user_attr = doctor1_attr;
         String policy = doctor_policy;
 
         Cpabe test = new Cpabe();
@@ -39,7 +39,7 @@ public class PHR {
         test.keygen(pubfile, prvfile, mskfile, user_attr);
         System.out.println("//Private key for " + user_attr);
 
-        //test.enc(pubfile, policy, inputfile, encfile);
+        test.enc(pubfile, policy, inputfile, encfile);
         System.out.println("//encrypting with policy:" + policy);
 
         System.out.println("//Decrypting");

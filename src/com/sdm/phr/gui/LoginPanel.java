@@ -128,6 +128,8 @@ public class LoginPanel extends javax.swing.JPanel {
         String orgnName = (String) inputOrgn.getSelectedItem();
         int orgnId = inputOrgn.getSelectedIndex();
         String secretKeyfile = inputSecretKey.getText();
+        
+        
     }//GEN-LAST:event_btnLoginActionPerformed
 
 
