@@ -1,14 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.sdm.phr.gui;
 
-/**
- *
- * @author phoenix
- */
+import com.sdm.phr.CryptoUtil;
+import com.sdm.phr.DatabaseClient;
+import com.sdm.phr.KeyConfig;
+import javax.swing.JOptionPane;
+
+
 public class PatientLoginPanel extends javax.swing.JPanel {
 
     /**
@@ -16,6 +13,21 @@ public class PatientLoginPanel extends javax.swing.JPanel {
      */
     public PatientLoginPanel() {
         initComponents();
+
+        //set default key paths
+        setDefaultKeyPath();
+    }
+
+    public void setDefaultKeyPath() {
+        // Default key location
+//        String keyPathDir = System.getProperty("user.home") + File.separator + ".phr";
+//        String masterKeyPath = keyPathDir + File.separator + "master_key";
+//        String publicKeyPath = keyPathDir + File.separator + "public_key";
+
+//        jMasterKey.setText(masterKeyPath);
+//        jPublicKey.setText(publicKeyPath);
+        jMasterKey.setText(KeyConfig.getInstance().getPatientMasterKeyPath());
+        jPublicKey.setText(KeyConfig.getInstance().getPatientPublicKeyPath());
     }
 
     /**
@@ -28,30 +40,35 @@ public class PatientLoginPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jFullName = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        jMasterKey = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        jPublicKey = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        btnPatientLogin = new javax.swing.JButton();
 
-        jLabel1.setText("Name");
+        jLabel1.setText("Full Name");
 
         jLabel2.setText("Master Key");
 
         jButton1.setText("Browse");
 
-        jLabel3.setText("Private Key");
+        jLabel3.setText("Public Key");
 
         jButton2.setText("Browse");
 
-        jLabel4.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel4.setText("Patient Login");
 
-        jButton3.setText("Login");
+        btnPatientLogin.setText("Login");
+        btnPatientLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPatientLoginActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -70,14 +87,14 @@ public class PatientLoginPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField1)
-                                    .addComponent(jTextField2)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE))
+                                    .addComponent(jFullName)
+                                    .addComponent(jMasterKey)
+                                    .addComponent(jPublicKey, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jButton1)
                                     .addComponent(jButton2)))
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnPatientLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -88,34 +105,57 @@ public class PatientLoginPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jFullName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jMasterKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPublicKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
+                .addComponent(btnPatientLogin)
                 .addContainerGap(134, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnPatientLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPatientLoginActionPerformed
+        String fullName = jFullName.getText();
+        String masterKeyPath = jMasterKey.getText();
+        String publicKeyPath = jPublicKey.getText();
+
+        if (fullName.isEmpty() || masterKeyPath.isEmpty() || publicKeyPath.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill up all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String masterKeyChecksum = CryptoUtil.getFileChecksum(masterKeyPath, "SHA1");
+        String publicKeyChecksum = CryptoUtil.getFileChecksum(publicKeyPath, "SHA1");
+
+        boolean isUserValid = DatabaseClient.getInstance().validatePatientLogin(fullName, masterKeyChecksum, publicKeyChecksum);
+        if (isUserValid) {
+            JOptionPane.showMessageDialog(null, "Login successful", "Login Successful", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Check full name, master key, or public key, and try again", "Login Failure", JOptionPane.ERROR_MESSAGE);
+        }
+
+
+    }//GEN-LAST:event_btnPatientLoginActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPatientLogin;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JTextField jFullName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jMasterKey;
+    private javax.swing.JTextField jPublicKey;
     // End of variables declaration//GEN-END:variables
 }

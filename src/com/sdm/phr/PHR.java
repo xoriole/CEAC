@@ -4,10 +4,6 @@ import com.sdm.phr.cpabe.Cpabe;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
-/**
- *
- * @author phoenix
- */
 public class PHR {
 
     static String doctor1_attr = "type:doctor hospital:A name:Doctor1";
@@ -39,12 +35,12 @@ public class PHR {
         test.keygen(pubfile, prvfile, mskfile, user_attr);
         System.out.println("//Private key for " + user_attr);
 
-        test.enc(pubfile, policy, inputfile, encfile);
+        test.enc(pubfile, policy, inputfile, encfile); // change file to string 
         System.out.println("//encrypting with policy:" + policy);
 
         System.out.println("//Decrypting");
         try {
-            test.dec(pubfile, prvfile, encfile, decfile);
+            test.dec(pubfile, prvfile, encfile, decfile); // modify to exclude pubfile
 //        System.out.println("//end to dec");
         } catch (Exception e) {
             e.printStackTrace();

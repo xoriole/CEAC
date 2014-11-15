@@ -1,20 +1,35 @@
 package com.sdm.phr.gui;
 
-/**
- *
- * @author phoenix
- */
+import com.sdm.phr.CryptoUtil;
+import com.sdm.phr.DatabaseClient;
+import java.util.Map;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+
 public class LoginPanel extends javax.swing.JPanel {
-    
+
     String publicKey;
     String privateKey;
     String name;
+
+    Map<String, Integer> orgnMap = null;
 
     /**
      * Creates new form LoginPanel
      */
     public LoginPanel() {
         initComponents();
+    }
+
+    public void updateOrgnList() {
+        orgnMap = DatabaseClient.getInstance().getOrgnMap();
+        Vector orgnNameVector = new Vector();
+        for (String name : orgnMap.keySet()) {
+            orgnNameVector.add(name);
+        }
+        final DefaultComboBoxModel model = new DefaultComboBoxModel(orgnNameVector);
+        jOrgnCombo.setModel(model);
     }
 
     /**
@@ -27,26 +42,25 @@ public class LoginPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        inputName = new javax.swing.JTextField();
+        jFullName = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        inputOrgn = new javax.swing.JComboBox();
+        jOrgnCombo = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
-        inputSecretKey = new javax.swing.JTextField();
+        jSecretKey = new javax.swing.JTextField();
         btnSecretKeyBrowser = new javax.swing.JButton();
         btnLogin = new javax.swing.JButton();
-        btnAddUser = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jbtnFetch = new javax.swing.JButton();
 
         jLabel1.setText("Name");
 
-        inputName.addActionListener(new java.awt.event.ActionListener() {
+        jFullName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputNameActionPerformed(evt);
+                jFullNameActionPerformed(evt);
             }
         });
 
         jLabel2.setText("Organization");
-
-        inputOrgn.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel3.setText("Secret Key");
 
@@ -64,7 +78,15 @@ public class LoginPanel extends javax.swing.JPanel {
             }
         });
 
-        btnAddUser.setText("Add User");
+        jLabel4.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
+        jLabel4.setText("User Login");
+
+        jbtnFetch.setText("fetch");
+        jbtnFetch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnFetchActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -72,46 +94,50 @@ public class LoginPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(57, 57, 57)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(inputName)
-                            .addComponent(inputOrgn, 0, 164, Short.MAX_VALUE)
-                            .addComponent(inputSecretKey))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSecretKeyBrowser))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnAddUser)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jFullName)
+                                    .addComponent(jOrgnCombo, 0, 164, Short.MAX_VALUE)
+                                    .addComponent(jSecretKey))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnSecretKeyBrowser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jbtnFetch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(56, 56, 56)
+                .addGap(23, 23, 23)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(inputName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jFullName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(inputOrgn)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jOrgnCombo)
+                        .addComponent(jbtnFetch))
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(inputSecretKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSecretKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSecretKeyBrowser))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLogin)
-                    .addComponent(btnAddUser))
-                .addContainerGap(110, Short.MAX_VALUE))
+                .addComponent(btnLogin)
+                .addContainerGap(108, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -119,29 +145,46 @@ public class LoginPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSecretKeyBrowserActionPerformed
 
-    private void inputNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputNameActionPerformed
+    private void jFullNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFullNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_inputNameActionPerformed
+    }//GEN-LAST:event_jFullNameActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        String name = inputName.getText();
-        String orgnName = (String) inputOrgn.getSelectedItem();
-        int orgnId = inputOrgn.getSelectedIndex();
-        String secretKeyfile = inputSecretKey.getText();
-        
-        
+        String fullName = jFullName.getText();
+        String orgnName = (String) jOrgnCombo.getSelectedItem();
+        int orgnId = orgnMap.get(orgnName);
+        String secretKeyPath = jSecretKey.getText();
+
+        if (fullName.isEmpty() || orgnName.isEmpty() || secretKeyPath.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill up all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String secretKeyChecksum = CryptoUtil.getFileChecksum(secretKeyPath, "SHA1");
+        boolean isValidUser = DatabaseClient.getInstance().validateUserLogin(fullName, orgnId, secretKeyChecksum);
+        if (isValidUser) {
+            JOptionPane.showMessageDialog(null, "Login successful", "Login Successful", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Check full name, organization, or secret key, and try again", "Login Failure", JOptionPane.ERROR_MESSAGE);
+        }
+
     }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void jbtnFetchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnFetchActionPerformed
+        updateOrgnList();
+    }//GEN-LAST:event_jbtnFetchActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddUser;
     private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnSecretKeyBrowser;
-    private javax.swing.JTextField inputName;
-    private javax.swing.JComboBox inputOrgn;
-    private javax.swing.JTextField inputSecretKey;
+    private javax.swing.JTextField jFullName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JComboBox jOrgnCombo;
+    private javax.swing.JTextField jSecretKey;
+    private javax.swing.JButton jbtnFetch;
     // End of variables declaration//GEN-END:variables
 }
