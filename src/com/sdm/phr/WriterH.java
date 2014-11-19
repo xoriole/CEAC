@@ -1,40 +1,58 @@
 package com.sdm.phr;
 
-import java.util.Date;
+import com.sdm.phr.cpabe.AESCoder;
+import com.sdm.phr.cpabe.Cpabe;
+import java.util.Random;
 
 public class WriterH {
-	
-	private String publicParameters;
-	private DatabaseClient dc;
 
-	private String generateKey(String plaintext){
-		plaintext+=(new Date()).toString();
-		//Randomly create key usable by AES. 
-                // This is implemented as hash digest of plain text message.
-		return CryptoUtil.getStringChecksum(plaintext, "SHA1");
-	}
-	
-	public CipherKeyPair encrypt(String plaintext, String policy){
-		String key = generateKey(plaintext);
-		String ciphertext = aes_enc(plaintext, key);
-		String enc_key = enc(publicParameters, policy, key);
-		
-		CipherKeyPair result = new CipherKeyPair(ciphertext,enc_key);
-		return result;
-	}
-	
-//	public void sendSection(String message,String patientID){
-//		String policy = "patient";
-//		CipherKeyPair ckp = encrypt(message,policy);
-//		dc.insertSection(patientID, ckp, policy);
-//	}
+    private String publicParameters;
+    
+    private CipherKeyPair encrypt(String plaintext, String policy) {
+        System.out.println("pt " + plaintext);
+        System.out.println("pol " + policy);
         
-        public String aes_enc(String m, String key){
-            return null;
+        String key = String.valueOf(new Random().nextInt());
+        byte[] ciphertext = null;
+        try {
+            ciphertext = AESCoder.encrypt(key.getBytes(), plaintext.getBytes());
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         
-        public String enc(String param, String policy, String key){
-            return null;
+        byte[] enc_key = enc(publicParameters, policy, key);
+        
+        CipherKeyPair result = new CipherKeyPair(ciphertext, enc_key);
+        return result;
+    }
+
+    public void sendSection(String message, int patientID) {
+        String policy = "patient";
+        CipherKeyPair ckp = encrypt(message, policy);
+        DatabaseClient.getInstance().insertSection(patientID, ckp, policy);
+    }
+
+    public void sendSection(String message, int patientID, int authorID,
+            String policy) {
+        CipherKeyPair ckp = encrypt(message, policy);
+        DatabaseClient.getInstance().insertSection(patientID, authorID, ckp, policy);
+    }
+
+    public String aes_enc(String m, String key) {
+        return null;
+    }
+
+    public byte[] enc(String param, String policy, String ptkey) {
+        Cpabe test = new Cpabe();
+        param = "/tmp/public_key";
+        byte[] byteArrayEnc = null;
+        try {
+            byteArrayEnc = test.enc(param, policy, ptkey);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-	
+
+        return byteArrayEnc;
+    }
+
 }

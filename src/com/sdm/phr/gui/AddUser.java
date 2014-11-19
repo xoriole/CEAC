@@ -88,6 +88,11 @@ public class AddUser extends javax.swing.JPanel {
         });
 
         jbtnCancel.setText("Cancel");
+        jbtnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnCancelActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel5.setText("Add a new user");
@@ -119,9 +124,9 @@ public class AddUser extends javax.swing.JPanel {
                                 .addComponent(jOrgnCombo, 0, 185, Short.MAX_VALUE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jbtnAddUser)
-                                .addGap(15, 15, 15)
-                                .addComponent(jbtnCancel))
+                                .addComponent(jbtnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbtnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jAccessRightCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(62, Short.MAX_VALUE))
         );
@@ -214,6 +219,10 @@ public class AddUser extends javax.swing.JPanel {
             updateOrgnList();
         }
     }//GEN-LAST:event_jFullNameFocusGained
+
+    private void jbtnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCancelActionPerformed
+        parent.nextPanel(Main.PATIENT_HOME);
+    }//GEN-LAST:event_jbtnCancelActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

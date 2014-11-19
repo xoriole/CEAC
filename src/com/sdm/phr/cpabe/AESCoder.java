@@ -41,12 +41,22 @@ public class AESCoder {
     }
 
     public static void main(String[] args) throws Exception {
-//        String key = "my key";
+        String key = "my key";
         String plainMsg = "Hello world.Hello world.Hello world.Hello world.Hello world.Hello world.Hello world.Hello world.";
         AESCoder coder = new AESCoder();
-        byte[] key = AESCoder.getRawKey(plainMsg.getBytes());
-        byte[] cipherMsg = AESCoder.encrypt(key, plainMsg.getBytes());
-        byte[] plainAgain = AESCoder.decrypt(key, cipherMsg);
+        byte[] keyb = AESCoder.getRawKey(plainMsg.getBytes());
+        byte[] cipherMsg = AESCoder.encrypt(key.getBytes(), plainMsg.getBytes());
+        byte[] cipherMsg1 = AESCoder.encrypt(keyb, plainMsg.getBytes());
+
+        String ct = ba2str(cipherMsg);
+        System.out.println(ct);
+
+//        byte[] plainAgain = AESCoder.decrypt(key.getBytes(), ct.getBytes());
+        byte[] plainAgain = AESCoder.decrypt(keyb, ct.getBytes());
         System.out.println(new String(plainAgain));
+    }
+
+    public static String ba2str(byte[] ct) {
+        return new String(ct);
     }
 }

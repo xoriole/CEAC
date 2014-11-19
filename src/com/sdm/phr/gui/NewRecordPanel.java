@@ -160,7 +160,7 @@ public class NewRecordPanel extends javax.swing.JPanel {
         String record = jRecord.getText();
         
         WriterH cwriter = new WriterH();
-        CipherKeyPair ckPair = cwriter.encrypt(record, accessPolicy);
+//        CipherKeyPair ckPair = cwriter.encrypt(record, accessPolicy);
         
         
     }//GEN-LAST:event_btnEncryptAndInsertActionPerformed

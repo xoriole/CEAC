@@ -15,13 +15,13 @@ public class PHR {
         //System.loadLibrary("libpbc");
         //System.loadLibrary("libjpbc-pbc");
 
-        String pubfile = "keys/public_key";
-        String mskfile = "keys/master_key";
-        String prvfile = "keys/private_key";
+        String pubfile = "/tmp/public_key";
+        String mskfile = "/tmp/master_key";
+        String prvfile = "/tmp/private_key";
 
-        String inputfile = "data/input.pdf";
-        String encfile = "data/input.pdf.enc";
-        String decfile = "data/output.pdf";
+        String inputfile = "/tmp/hello.txt";
+        String encfile = "/tmp/hello.txt.enc";
+        String decfile = "/tmp/hello2.txt";
 
 //        String user_attr = nurse1_attr;
         String user_attr = doctor1_attr;
