@@ -41,11 +41,12 @@ public class AESCoder {
     }
 
     public static void main(String[] args) throws Exception {
-        String key = "my key";
+//        String key = "my key";
         String plainMsg = "Hello world.Hello world.Hello world.Hello world.Hello world.Hello world.Hello world.Hello world.";
         AESCoder coder = new AESCoder();
-        byte[] cipherMsg = AESCoder.encrypt(key.getBytes(), plainMsg.getBytes());
-        byte[] plainAgain = AESCoder.decrypt(key.getBytes(), cipherMsg);
+        byte[] key = AESCoder.getRawKey(plainMsg.getBytes());
+        byte[] cipherMsg = AESCoder.encrypt(key, plainMsg.getBytes());
+        byte[] plainAgain = AESCoder.decrypt(key, cipherMsg);
         System.out.println(new String(plainAgain));
     }
 }

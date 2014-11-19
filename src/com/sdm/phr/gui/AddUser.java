@@ -12,16 +12,20 @@ import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
-
 public class AddUser extends javax.swing.JPanel {
-
+    Main parent;
     Map<String, Integer> orgnMap = null;
 
     /**
      * Creates new form AddUser
      */
-    public AddUser() {        
+    public AddUser() {
         initComponents();
+    }
+    
+    public AddUser(Main parent) {
+        initComponents();
+        this.parent = parent;
     }
 
     public void updateOrgnList() {
@@ -54,11 +58,17 @@ public class AddUser extends javax.swing.JPanel {
         jbtnAddUser = new javax.swing.JButton();
         jbtnCancel = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jFetchOrgn = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jAccessRightCombo = new javax.swing.JComboBox();
 
         jLabel1.setText("Name");
 
         jFullName.setText(" ");
+        jFullName.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jFullNameFocusGained(evt);
+            }
+        });
 
         jLabel2.setText("Organization");
 
@@ -82,12 +92,9 @@ public class AddUser extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel5.setText("Add a new user");
 
-        jFetchOrgn.setText("fetch");
-        jFetchOrgn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFetchOrgnActionPerformed(evt);
-            }
-        });
+        jLabel6.setText("Keys to generate");
+
+        jAccessRightCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Read Key Only", "Write Key Only", "Read and Write Key" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -98,24 +105,25 @@ public class AddUser extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jbtnAddUser)
-                                .addGap(18, 18, 18)
-                                .addComponent(jbtnCancel))
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jFullName)
                                 .addComponent(jOrgnCombo, 0, 185, Short.MAX_VALUE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jFetchOrgn)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jbtnAddUser)
+                                .addGap(15, 15, 15)
+                                .addComponent(jbtnCancel))
+                            .addComponent(jAccessRightCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -129,66 +137,95 @@ public class AddUser extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jOrgnCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFetchOrgn))
+                    .addComponent(jOrgnCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jAccessRightCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbtnAddUser)
                     .addComponent(jbtnCancel))
-                .addGap(39, 39, 39))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jFetchOrgnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFetchOrgnActionPerformed
-        updateOrgnList();
-    }//GEN-LAST:event_jFetchOrgnActionPerformed
-
     private void jbtnAddUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAddUserActionPerformed
         String fullName = jFullName.getText().trim();
-        String orgnName = (String)jOrgnCombo.getSelectedItem();
+        String orgnName = (String) jOrgnCombo.getSelectedItem();
         String attributes = jAttributes.getText().trim();
-        
-        if(fullName.isEmpty()|| orgnName.isEmpty()||attributes.isEmpty()){
+        int accessKeysChoice = jAccessRightCombo.getSelectedIndex();
+
+        if (fullName.isEmpty() || orgnName.isEmpty() || attributes.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please fill up all fields.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         // create a secret key for user
         Cpabe phr = new Cpabe();
-        String keyDownloadPath = System.getProperty("user.home") + File.separator + "Desktop"+File.separator;
-        keyDownloadPath+=fullName.replaceAll(" ", "_")+".key";
-        
+        String baseKeyDownloadPath = System.getProperty("user.home") + File.separator + "Desktop" + File.separator;
+        String readKeyDownloadPath = baseKeyDownloadPath+fullName.replaceAll(" ", "_") + "_read.key";
+        String writeKeyDownloadPath = baseKeyDownloadPath+fullName.replaceAll(" ", "_") + "_write.key";
+        System.out.println("read key path:"+readKeyDownloadPath);
+
         try {
-            phr.keygen(KeyConfig.getInstance().getPatientPublicKeyPath(), keyDownloadPath, KeyConfig.getInstance().getPatientMasterKeyPath(), attributes);
-            JOptionPane.showMessageDialog(null, "User added successfully. Secret key for user is created at following path:"+keyDownloadPath);
-            
+            System.out.println("choice:"+accessKeysChoice);
+            switch (accessKeysChoice) {
+                case 0:
+                    phr.keygen(KeyConfig.getInstance().getPatientReadPublicKeyPath(), readKeyDownloadPath, KeyConfig.getInstance().getPatientReadMasterKeyPath(), attributes);
+                    break;
+                case 1:
+                    phr.keygen(KeyConfig.getInstance().getPatientWritePublicKeyPath(), writeKeyDownloadPath, KeyConfig.getInstance().getPatientWriteMasterKeyPath(), attributes);
+                    break;
+                case 2:
+                    phr.keygen(KeyConfig.getInstance().getPatientReadPublicKeyPath(), readKeyDownloadPath, KeyConfig.getInstance().getPatientReadMasterKeyPath(), attributes);
+                    phr.keygen(KeyConfig.getInstance().getPatientWritePublicKeyPath(), writeKeyDownloadPath, KeyConfig.getInstance().getPatientWriteMasterKeyPath(), attributes);
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "No such option available", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+
+            }
             //update database
-            String secretKeyChecksum = CryptoUtil.getFileChecksum(keyDownloadPath, "SHA1");
+            String readSecretKeyChecksum = CryptoUtil.getFileChecksum(readKeyDownloadPath, "SHA1");
+            String writeSecretKeyChecksum = CryptoUtil.getFileChecksum(writeKeyDownloadPath, "SHA1");
             int orgnId = orgnMap.get(orgnName);
-            DatabaseClient.getInstance().addUser(fullName, orgnId, attributes, secretKeyChecksum);
+            DatabaseClient.getInstance().addUser(fullName, orgnId, attributes, readSecretKeyChecksum,writeSecretKeyChecksum);
+            JOptionPane.showMessageDialog(null, "User added successfully. Secret key(s) for user is created at following path:" + baseKeyDownloadPath);
+
         } catch (Exception ex) {
             Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Ops! Something went wrong.","Error",JOptionPane.ERROR_MESSAGE);
-        } 
-        
+            JOptionPane.showMessageDialog(null, "Ops! Something went wrong.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
     }//GEN-LAST:event_jbtnAddUserActionPerformed
+
+    private void jFullNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFullNameFocusGained
+         if(orgnMap==null){
+            updateOrgnList();
+        }
+    }//GEN-LAST:event_jFullNameFocusGained
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox jAccessRightCombo;
     private javax.swing.JTextArea jAttributes;
-    private javax.swing.JButton jFetchOrgn;
     private javax.swing.JTextField jFullName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JComboBox jOrgnCombo;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtnAddUser;

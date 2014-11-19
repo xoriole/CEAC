@@ -50,9 +50,9 @@ public class DatabaseClient {
         }
     }
 
-    public void addPatient(String fullName, String dob, String address,String masterKeyChecksum, String publicKeyChecksum){
-        String sql = "insert into patient(full_name, date_of_birth, address, master_key_checksum, public_key_checksum) "
-                + "values('"+fullName+"','"+dob+"','"+address+"','"+masterKeyChecksum+"','"+publicKeyChecksum+"');";
+    public void addPatient(String fullName, String dob, String address,String readMasterKeyChecksum, String writeMasterKeyChecksum){
+        String sql = "insert into patient(full_name, date_of_birth, address, read_master_key_checksum, write_master_key_checksum) "
+                + "values('"+fullName+"','"+dob+"','"+address+"','"+readMasterKeyChecksum+"','"+writeMasterKeyChecksum+"');";
         System.out.println("sql:"+sql);
         try {
             stmt.executeUpdate(sql);
@@ -61,17 +61,17 @@ public class DatabaseClient {
         }
     }
     
-    public boolean validatePatientLogin(String fullName,String masterKeyChecksum, String publicKeyChecksum){
+    public boolean validatePatientLogin(String fullName,String readMasterKeyChecksum, String writeMasterKeyChecksum){
         try {
-            String sql = "select master_key_checksum, public_key_checksum from patient where full_name='"+fullName+"'";
+            String sql = "select read_master_key_checksum, write_master_key_checksum from patient where full_name='"+fullName+"'";
             ResultSet rs = stmt.executeQuery(sql);
             while(rs.next()){
-                String dbMasterKeyChecksum = rs.getString("master_key_checksum");
-                if(!masterKeyChecksum.equals(dbMasterKeyChecksum)){
+                String dbReadMasterKeyChecksum = rs.getString("read_master_key_checksum");
+                if(!readMasterKeyChecksum.equals(dbReadMasterKeyChecksum)){
                     return false;
                 }
-                String dbPublicKeyChecksum = rs.getString("public_key_checksum");
-                if(!publicKeyChecksum.equals(dbPublicKeyChecksum)){
+                String dbWriteMasterKeyChecksum = rs.getString("write_master_key_checksum");
+                if(!writeMasterKeyChecksum.equals(dbWriteMasterKeyChecksum)){
                     return false;
                 }
                 return true;
@@ -98,9 +98,9 @@ public class DatabaseClient {
         return orgnMap;
     }
     
-    public void addUser(String fullName, int orgnId, String attributes, String secretKeyChecksum){
-        String sql = "insert into user(full_name, orgn_id, attributes, secret_key_checksum) "
-                + "values('"+fullName+"','"+orgnId+"','"+attributes+"','"+secretKeyChecksum+"');";
+    public void addUser(String fullName, int orgnId, String attributes, String readSecretKeyChecksum, String writeSecretKeyChecksum){
+        String sql = "insert into user(full_name, orgn_id, attributes, read_secret_key_checksum,write_secret_key_checksum) "
+                + "values('"+fullName+"','"+orgnId+"','"+attributes+"','"+readSecretKeyChecksum+"','"+writeSecretKeyChecksum+"');";
         System.out.println("sql:"+sql);
         try {
             stmt.executeUpdate(sql);
@@ -109,16 +109,22 @@ public class DatabaseClient {
         }
     }
     
-    public boolean validateUserLogin(String fullName, int orgnId, String secretKeyChecksum){
+    public boolean validateUserLogin(String fullName, int orgnId, String readSecretKeyChecksum, String writeSecretKeyChecksum){
         try {
-            String sql = "select secret_key_checksum from user where full_name='"+fullName+"' and orgn_id="+orgnId;
+            String sql = "select read_secret_key_checksum, write_secret_key_checksum from user where full_name='"+fullName+"' and orgn_id="+orgnId;
             System.out.println("sql:"+sql);
-            System.out.println("secret key checksum:"+secretKeyChecksum);
+            System.out.println("read secret key checksum:"+readSecretKeyChecksum);
+            System.out.println("write secret key checksum:"+writeSecretKeyChecksum);
             ResultSet rs = stmt.executeQuery(sql);
             while(rs.next()){
-                String dbSecretKeyChecksum = rs.getString("secret_key_checksum");
-                System.out.println("db secret key checksum:"+dbSecretKeyChecksum);
-                if(!secretKeyChecksum.equals(dbSecretKeyChecksum)){
+                String dbReadSecretKeyChecksum = rs.getString("read_secret_key_checksum");
+                String dbWriteSecretKeyChecksum = rs.getString("write_secret_key_checksum");
+                System.out.println("db read secret key checksum:"+dbReadSecretKeyChecksum);
+                System.out.println("db write secret key checksum:"+dbWriteSecretKeyChecksum);
+                if(!readSecretKeyChecksum.equals(dbReadSecretKeyChecksum)){
+                    return false;
+                }
+                if(!writeSecretKeyChecksum.equals(dbWriteSecretKeyChecksum)){
                     return false;
                 }
                 return true;
@@ -129,11 +135,31 @@ public class DatabaseClient {
         return false;
     }
     
-    public void insertSection(String patientID, CipherKeyPair ckp, String policy) {
-
-        String SQLstatement = "INSERT INTO health_data VALUES('" + patientID + "', "
-                + "SELECT COUNT(*) FROM health_data, '" + ckp.getCiphertext() + "', '" + policy + "', '" + ckp.getKey() + "');";
-        //Send statement to database.
+    public Map<String,Integer> getPatientMap(){
+        Map<String,Integer> patientMap = new HashMap<String,Integer>();
+        String sql = "select full_name, pid from patient";
+        try {
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next()){
+               int pid = rs.getInt("pid");
+               String name = rs.getString("full_name");
+               patientMap.put(name,pid);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return patientMap;
+    }
+    
+    public void insertSection(int patientID, int authorID, CipherKeyPair ckp, String policy) {
+        String sql = "INSERT INTO health_data(pid,author_id,aes_key,cipher_text,access_policy)"
+                + "values("+patientID+","+authorID+",'"+ckp.getKey()+"','"+ckp.getCiphertext()+"','"+policy+"')";
+        System.out.println("sql:"+sql);
+        try {
+            stmt.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public CipherKeyPair retrieveSection(String patientID, String attribute) {

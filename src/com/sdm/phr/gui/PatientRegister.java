@@ -10,15 +10,21 @@ import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-
 public class PatientRegister extends javax.swing.JPanel {
+
+    Main parent;
 
     /**
      * Creates new form PatientRegister
      */
     public PatientRegister() {
         initComponents();
-        JDialog.setDefaultLookAndFeelDecorated(true);
+
+    }
+
+    public PatientRegister(Main parent) {
+        initComponents();
+        this.parent = parent;
     }
 
     /**
@@ -39,6 +45,7 @@ public class PatientRegister extends javax.swing.JPanel {
         jAddress = new javax.swing.JTextField();
         btnPatientRegister = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel1.setText("Register as a new Patient.");
@@ -57,6 +64,13 @@ public class PatientRegister extends javax.swing.JPanel {
         });
 
         jLabel5.setText("<html>Note: By registering as a patient, <br> you will receive a master key and a public key in your home directory<br> Please keep your master key safe, and never reveal to anybody. <br>For only those whom you want to give access to write, <br>provide them your public key, otherwise keep it secret too.</html>");
+
+        jButton1.setText("Cancel");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -80,7 +94,9 @@ public class PatientRegister extends javax.swing.JPanel {
                             .addComponent(jFullName, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addComponent(btnPatientRegister)
-                            .addGap(70, 70, 70))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jButton1)
+                            .addGap(9, 9, 9))
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(34, Short.MAX_VALUE))
@@ -103,7 +119,9 @@ public class PatientRegister extends javax.swing.JPanel {
                     .addComponent(jLabel4)
                     .addComponent(jAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnPatientRegister)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnPatientRegister)
+                    .addComponent(jButton1))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(38, Short.MAX_VALUE))
@@ -129,39 +147,46 @@ public class PatientRegister extends javax.swing.JPanel {
             System.out.println("Previous keys will be overwritten.");
         }
 
-//        String masterKeyPath = keyPath + File.separator + "master_key";
-//        String publicKeyPath = keyPath + File.separator + "public_key";
-
         Cpabe phr = new Cpabe();
         try {
             System.out.println("Generating master key and public parameters.");
-//            phr.setup(publicKeyPath, masterKeyPath);
-            phr.setup(KeyConfig.getInstance().getPatientPublicKeyPath(), KeyConfig.getInstance().getPatientMasterKeyPath());
-            
-            String masterKeyChecksum = CryptoUtil.getFileChecksum(KeyConfig.getInstance().getPatientMasterKeyPath(), "SHA1");
-            String publicKeyChecksum = CryptoUtil.getFileChecksum(KeyConfig.getInstance().getPatientPublicKeyPath(), "SHA1");
+            phr.setup(KeyConfig.getInstance().getPatientReadPublicKeyPath(), KeyConfig.getInstance().getPatientReadMasterKeyPath());
+            phr.setup(KeyConfig.getInstance().getPatientWritePublicKeyPath(), KeyConfig.getInstance().getPatientWriteMasterKeyPath());
 
-            DatabaseClient.getInstance().addPatient(fullName, dob, address, masterKeyChecksum, publicKeyChecksum);
+            String readMasterKeyChecksum = CryptoUtil.getFileChecksum(KeyConfig.getInstance().getPatientReadMasterKeyPath(), "SHA1");
+            String writeMasterKeyChecksum = CryptoUtil.getFileChecksum(KeyConfig.getInstance().getPatientWriteMasterKeyPath(), "SHA1");
+
+            DatabaseClient.getInstance().addPatient(fullName, dob, address, readMasterKeyChecksum, writeMasterKeyChecksum);
         } catch (Exception ex) {
             Logger.getLogger(PatientRegister.class.getName()).log(Level.SEVERE, null, ex);
+            return;
         }
         System.out.println("Patient registered successfully.)");
+
+        JOptionPane.showMessageDialog(null, "You are successfully registered. Your keys are stored in following directory: "+phrDir+". Please login now using your keys", "Registration successful", JOptionPane.INFORMATION_MESSAGE);
+        parent.nextPanel(Main.PATIENT_LOGIN);
         
-        int response = JOptionPane.showConfirmDialog(null, "You are registered now. Would you like to login now?", "Registration successful",
-                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (response == JOptionPane.NO_OPTION) {
-            System.out.println("No button clicked");
-        } else if (response == JOptionPane.YES_OPTION) {
-            System.out.println("Yes button clicked");
-        } else if (response == JOptionPane.CLOSED_OPTION) {
-            System.out.println("JOptionPane closed");
-        }
+//        int response = JOptionPane.showConfirmDialog(null, "You are registered now. Would you like to login now?", "Registration successful",
+//                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+//        if (response == JOptionPane.NO_OPTION) {
+//            System.out.println("No button clicked");
+//        } else if (response == JOptionPane.YES_OPTION) {
+//            System.out.println("Yes button clicked");
+//
+//        } else if (response == JOptionPane.CLOSED_OPTION) {
+//            System.out.println("JOptionPane closed");
+//        }
     }//GEN-LAST:event_btnPatientRegisterActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        parent.nextPanel(Main.FIRST_SCREEN);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPatientRegister;
     private javax.swing.JTextField jAddress;
+    private javax.swing.JButton jButton1;
     private javax.swing.JTextField jDob;
     private javax.swing.JTextField jFullName;
     private javax.swing.JLabel jLabel1;

@@ -2,12 +2,17 @@ package com.sdm.phr.gui;
 
 
 public class HomePanel extends javax.swing.JPanel {
-
+    Main parent;
     /**
      * Creates new form HomePanel
      */
     public HomePanel() {
         initComponents();
+    }
+    
+    public HomePanel(Main parent) {
+        initComponents();
+        this.parent = parent;
     }
 
     /**

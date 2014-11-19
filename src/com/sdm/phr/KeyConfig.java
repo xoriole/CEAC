@@ -4,43 +4,88 @@ import java.io.File;
 
 public class KeyConfig {
     private static KeyConfig instance = new KeyConfig();
-    private String patientMasterKeyPath = null;
-    private String patientPublicKeyPath = null;
-    private String userSecretKeyPath = null;
+    private String patientReadMasterKeyPath = null;
+    private String patientWriteMasterKeyPath = null;
+    private String patientReadPublicKeyPath = null;
+    private String patientWritePublicKeyPath = null;
+    private String userReadSecretKeyPath = null;
+    private String userWriteSecretKeyPath = null;
+    private int patientId;
+    private int userId;
     
     private KeyConfig(){ 
         //setup default paths
         String keyPath = System.getProperty("user.home") + File.separator + ".phr";
-        patientMasterKeyPath = keyPath + File.separator + "master.key";
-        patientPublicKeyPath = keyPath + File.separator + "public.key";
+        patientReadMasterKeyPath = keyPath + File.separator + "master_read.key";
+        patientWriteMasterKeyPath = keyPath + File.separator + "master_write.key";
+        patientReadPublicKeyPath = keyPath + File.separator + "public_read.key";
+        patientWritePublicKeyPath = keyPath + File.separator + "public_write.key";
     }
     public static KeyConfig getInstance(){
         return instance;
     }
 
-    public String getPatientMasterKeyPath() {
-        return patientMasterKeyPath;
+    public String getPatientReadMasterKeyPath() {
+        return patientReadMasterKeyPath;
     }
 
-    public void setPatientMasterKeyPath(String patientMasterKeyPath) {
-        this.patientMasterKeyPath = patientMasterKeyPath;
+    public void setPatientReadMasterKeyPath(String patientMasterKeyPath) {
+        this.patientReadMasterKeyPath = patientMasterKeyPath;
     }
 
-    public String getPatientPublicKeyPath() {
-        return patientPublicKeyPath;
+    public String getPatientReadPublicKeyPath() {
+        return patientReadPublicKeyPath;
     }
 
-    public void setPatientPublicKeyPath(String patientPublicKeyPath) {
-        this.patientPublicKeyPath = patientPublicKeyPath;
+    public void setPatientReadPublicKeyPath(String patientPublicKeyPath) {
+        this.patientReadPublicKeyPath = patientPublicKeyPath;
     }
 
-    public String getUserSecretKeyPath() {
-        return userSecretKeyPath;
+    public String getUserReadSecretKeyPath() {
+        return userReadSecretKeyPath;
     }
 
-    public void setUserSecretKeyPath(String userSecretKeyPath) {
-        this.userSecretKeyPath = userSecretKeyPath;
+    public void setUserSecretReadKeyPath(String userSecretKeyPath) {
+        this.userReadSecretKeyPath = userSecretKeyPath;
     }
-    
-    
+
+    public int getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(int patientId) {
+        this.patientId = patientId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getPatientWriteMasterKeyPath() {
+        return patientWriteMasterKeyPath;
+    }
+
+    public void setPatientWriteMasterKeyPath(String patientWriteMasterKeyPath) {
+        this.patientWriteMasterKeyPath = patientWriteMasterKeyPath;
+    }
+
+    public String getPatientWritePublicKeyPath() {
+        return patientWritePublicKeyPath;
+    }
+
+    public void setPatientWritePublicKeyPath(String patientWritePublicKeyPath) {
+        this.patientWritePublicKeyPath = patientWritePublicKeyPath;
+    }
+
+    public String getUserWriteSecretKeyPath() {
+        return userWriteSecretKeyPath;
+    }
+
+    public void setUserWriteSecretKeyPath(String userWriteSecretKeyPath) {
+        this.userWriteSecretKeyPath = userWriteSecretKeyPath;
+    }
 }
