@@ -20,10 +20,16 @@ public class WriterH {
 		return result;
 	}
 	
-	public void sendSection(String message,String patientID){
+	public void sendSection(String message, int patientID){
 		String policy = "patient";
 		CipherKeyPair ckp = encrypt(message,policy);
 		dc.insertSection(patientID, ckp, policy);
+	}
+        
+        public void sendSection(String message, int patientID, String policy){
+		CipherKeyPair ckp = encrypt(message,policy);
+		dc.insertSection(patientID, ckp, policy);
+                System.out.println("SendSection ok");
 	}
         
         public String aes_enc(String m, String key){

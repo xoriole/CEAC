@@ -92,6 +92,49 @@ public class Cpabe {
 		// PrintArr("element: ", m.toBytes());
 		Common.writeCpabeFile(encfile, cphBuf, aesBuf);
 	}
+        
+        /**
+         * 
+         * @param pubfile
+         * @param policy
+         * @param inputfile
+         * @param encfile
+         * @throws Exception 
+         */
+        public byte[] enc(String pubfile, String policy, String pt2ct) 
+                                                            throws Exception {
+		BswabePub pub;
+		BswabeCph cph;
+		BswabeCphKey keyCph;
+		byte[] plt;
+		byte[] cphBuf;
+		byte[] aesBuf;
+		byte[] pub_byte;
+		Element m;
+
+		/* get BswabePub from pubfile */
+		pub_byte = Common.suckFile(pubfile);
+		pub = SerializeUtils.unserializeBswabePub(pub_byte);
+
+		keyCph = Bswabe.enc(pub, policy);
+		cph = keyCph.cph;
+		m = keyCph.key;
+		System.err.println("m = " + m.toString());
+
+		if (cph == null) {
+			System.out.println("Error happed in enc");
+			System.exit(0);
+		}
+
+		cphBuf = SerializeUtils.bswabeCphSerialize(cph);
+
+		/* read file to encrypted */
+		plt = pt2ct.getBytes();
+		aesBuf = AESCoder.encrypt(m.toBytes(), plt);
+		return Common.writeCpabeFile(cphBuf, aesBuf);
+	}
+        
+        
 
 	public void dec(String pubfile, String prvfile, String encfile,
 			String decfile) throws Exception {
@@ -126,6 +169,50 @@ public class Cpabe {
 		} else {
 			System.exit(0);
 		}
+	}
+        
+        /**
+         * 
+         * @param pubfile
+         * @param prvfile
+         * @param encfile
+         * @param decfile
+         * @throws Exception 
+         */
+        public byte[] dec(String pubfile, String prvfile, byte[] ct2pt)
+                                                        throws Exception {
+		byte[] aesBuf, cphBuf;
+		byte[] plt;
+		byte[] prv_byte;
+		byte[] pub_byte;
+		byte[][] tmp;
+		BswabeCph cph;
+		BswabePrv prv;
+		BswabePub pub;
+
+		/* get BswabePub from pubfile */
+		pub_byte = Common.suckFile(pubfile);
+		pub = SerializeUtils.unserializeBswabePub(pub_byte);
+
+		/* read ciphertext */
+		tmp = Common.readCpabeFile(ct2pt);
+		aesBuf = tmp[0];
+		cphBuf = tmp[1];
+		cph = SerializeUtils.bswabeCphUnserialize(pub, cphBuf);
+
+		/* get BswabePrv form prvfile */
+		prv_byte = Common.suckFile(prvfile);
+		prv = SerializeUtils.unserializeBswabePrv(pub, prv_byte);
+
+		BswabeElementBoolean beb = Bswabe.dec(pub, prv, cph);
+		//System.err.println("e = " + beb.e.toString());
+		if (beb.b) {
+			plt = AESCoder.decrypt(beb.e.toBytes(), aesBuf);
+			return plt;
+		} else {
+			System.exit(0);
+		}
+            return null;
 	}
 
 }
