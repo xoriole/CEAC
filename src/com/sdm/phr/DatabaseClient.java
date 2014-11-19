@@ -1,5 +1,8 @@
 package com.sdm.phr;
 
+import com.mysql.jdbc.Blob;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -130,11 +133,20 @@ public class DatabaseClient {
         return false;
     }
 
-    public boolean insertSection(int patientID, CipherKeyPair ckp,
-            String policy) {
-        String query = "INSERT INTO health_data VALUES('" + patientID + "', "
+    public void insertSection(int patientID, CipherKeyPair ckp, String policy) {
+        String SQLstatement = "INSERT INTO health_data VALUES('" + patientID + "', "
                 + "SELECT COUNT(*) FROM health_data, '" + ckp.getCiphertext() + "', '" + policy + "', '" + ckp.getKey() + "');";
+//Send statement to database.
+    }
 
+    public boolean insertSection(int patientID, int authorID, CipherKeyPair ckp,
+            String policy) {
+        System.out.println("insertSection");
+        String query = "insert into health_data (pid, author_id, aes_key, "
+                + "cipher_text, access_policy) values (" + patientID + ", "
+                + authorID + ", '" + ckp.getKey() + "', '" + ckp.getCiphertext()
+                + "', '" + policy + "')";
+        System.out.println("query: " + query);
         //Send statement to database.
         try {
             stmt.executeUpdate(query);
@@ -148,8 +160,8 @@ public class DatabaseClient {
         String SQLstatement = "SELECT contents FROM health_data WHERE patientID='" + patientID + "' AND policy LIKE %" + attribute + "%;";
         //Send statement to database.
 
-        CipherKeyPair result = new CipherKeyPair("", "");
-        return result;
+        //CipherKeyPair result = new CipherKeyPair("", "");
+        return null;
     }
 
     public String getOrgName(int oid) throws SQLException {
@@ -206,5 +218,35 @@ public class DatabaseClient {
         }
 
         return false;
+    }
+    
+    public boolean insertBlob(byte[] binaryData) {
+        String b64 = Base64.encode(binaryData);
+        System.out.println(b64);
+        String query = "insert into test values ('"
+                + b64 +"')";
+        
+        try {
+            stmt.executeUpdate(query);
+        } catch (Exception e) {
+            //Try to delete previous tokens.
+            //No problem if there are no old tokens.
+        }
+        
+        return true;
+    }
+    
+    
+    public String readBlob() throws SQLException  {
+        String query = "select bincol from test";
+        String b64 = null;
+        
+        ResultSet rs = stmt.executeQuery(query);
+        if (rs.next()) {
+            b64 = rs.getString("bincol");
+            System.out.println(b64);
+        }
+        
+        return b64;
     }
 }
