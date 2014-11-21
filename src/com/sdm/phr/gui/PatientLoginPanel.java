@@ -3,7 +3,13 @@ package com.sdm.phr.gui;
 import com.sdm.phr.CryptoUtil;
 import com.sdm.phr.DatabaseClient;
 import com.sdm.phr.KeyConfig;
+import com.sdm.phr.Session;
+import com.sdm.phr.cpabe.Cpabe;
 import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -111,6 +117,12 @@ public class PatientLoginPanel extends javax.swing.JPanel {
             }
         });
 
+        jWritePublicKey.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jWritePublicKeyActionPerformed(evt);
+            }
+        });
+
         jLabel6.setText("Write Public Key");
 
         jButton5.setText("Cancel");
@@ -129,38 +141,38 @@ public class PatientLoginPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jFullName)
-                            .addComponent(jReadMasterKey)
-                            .addComponent(jReadPublicKey, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnReadMasterKey)
-                            .addComponent(btnReadPublicKey)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnPatientLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26)
-                                .addComponent(jButton5))
-                            .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jWriteMasterKey, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
-                                    .addComponent(jWritePublicKey))
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(29, 29, 29)
+                                .addComponent(btnPatientLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jWritePublicKey)
+                                    .addComponent(jWriteMasterKey)
+                                    .addComponent(jFullName)
+                                    .addComponent(jReadPublicKey)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jReadMasterKey, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnReadMasterKey)
+                                    .addComponent(btnReadPublicKey)
                                     .addComponent(btnWriteMasterKey)
                                     .addComponent(btnWritePublicKey))))))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -182,21 +194,19 @@ public class PatientLoginPanel extends javax.swing.JPanel {
                     .addComponent(jReadPublicKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnReadPublicKey))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jWriteMasterKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnWriteMasterKey))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
+                    .addComponent(jWriteMasterKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnWriteMasterKey)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jWritePublicKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
                     .addComponent(btnWritePublicKey))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnPatientLogin)
-                    .addComponent(jButton5))
+                    .addComponent(jButton5)
+                    .addComponent(btnPatientLogin))
                 .addContainerGap(74, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -218,17 +228,25 @@ public class PatientLoginPanel extends javax.swing.JPanel {
 
         boolean isUserValid = DatabaseClient.getInstance().validatePatientLogin(fullName, readMasterKeyChecksum, writeMasterKeyChecksum);
         if (isUserValid) {
+            Session.getInstance().setPatientName(fullName);
+            Session.getInstance().setPatientUserId(DatabaseClient.getInstance().getPatientUserId(fullName));
             JOptionPane.showMessageDialog(null, "Login successful", "Login Successful", JOptionPane.INFORMATION_MESSAGE);
-//            int response = JOptionPane.showConfirmDialog(null, "You are registered now. Would you like to login now?", "Login successful",
-//                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-//            if (response == JOptionPane.NO_OPTION) {
-//                System.out.println("No button clicked");
-//            } else if (response == JOptionPane.YES_OPTION) {
-//                System.out.println("Yes button clicked");
+
+            parent.patientHomePanel.update();
             parent.nextPanel(Main.PATIENT_HOME);
-//            } else if (response == JOptionPane.CLOSED_OPTION) {
-//                System.out.println("JOptionPane closed");
-//            }
+
+            //check if secret key is present, if not create it for patient  
+            int pid= DatabaseClient.getInstance().getPid(fullName);
+            String attributes = "type:patient type:doctor type:insurance type:employer type:hospital type:health_club pid:"+pid;
+            Cpabe cpabe = new Cpabe();
+            try {
+                cpabe.keygen(readPublicKeyPath, KeyConfig.getInstance().getPatientReadSecretKeyPath(), readMasterKeyPath, attributes);
+                cpabe.keygen(writePublicKeyPath, KeyConfig.getInstance().getPatientWriteSecretKeyPath(), writeMasterKeyPath, attributes);
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(PatientLoginPanel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(PatientLoginPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Check full name, master key, or public key, and try again", "Login Failure", JOptionPane.ERROR_MESSAGE);
         }
@@ -279,6 +297,10 @@ public class PatientLoginPanel extends javax.swing.JPanel {
             System.out.println("File access cancelled by user.");
         }
     }//GEN-LAST:event_btnWritePublicKeyActionPerformed
+
+    private void jWritePublicKeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jWritePublicKeyActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jWritePublicKeyActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -25,50 +25,49 @@
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="jLabel4" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jLabel2" max="32767" attributes="0"/>
-                          <Component id="jLabel1" max="32767" attributes="0"/>
-                          <Component id="jLabel3" alignment="0" min="-2" pref="102" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jFullName" max="32767" attributes="0"/>
-                          <Component id="jReadMasterKey" max="32767" attributes="0"/>
-                          <Component id="jReadPublicKey" pref="178" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnReadMasterKey" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnReadPublicKey" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="jLabel5" pref="102" max="32767" attributes="0"/>
-                          <Component id="jLabel6" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="jLabel2" pref="102" max="32767" attributes="0"/>
+                                  <Component id="jLabel1" max="32767" attributes="0"/>
+                              </Group>
+                              <Component id="jLabel3" alignment="1" min="-2" pref="102" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jLabel5" min="-2" pref="117" max="-2" attributes="0"/>
+                          <Component id="jLabel6" min="-2" pref="102" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="btnPatientLogin" min="-2" pref="78" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                              <Component id="jButton5" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                              <Component id="btnPatientLogin" min="-2" pref="101" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="jButton5" min="-2" pref="103" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jWriteMasterKey" pref="178" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jWritePublicKey" max="32767" attributes="0"/>
+                                  <Component id="jWriteMasterKey" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jFullName" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jReadPublicKey" alignment="0" max="32767" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jReadMasterKey" min="-2" pref="257" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  </Group>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="btnWriteMasterKey" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnReadMasterKey" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnReadPublicKey" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnWriteMasterKey" min="-2" max="-2" attributes="0"/>
                                   <Component id="btnWritePublicKey" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="20" max="32767" attributes="0"/>
+              <EmptySpace pref="55" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -95,25 +94,21 @@
                   <Component id="btnReadPublicKey" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                      <Component id="jWriteMasterKey" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="btnWriteMasterKey" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jLabel5" min="-2" pref="18" max="-2" attributes="0"/>
-                      <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jWriteMasterKey" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnWriteMasterKey" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel5" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jWritePublicKey" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnWritePublicKey" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnPatientLogin" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButton5" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnPatientLogin" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="74" max="32767" attributes="0"/>
           </Group>
@@ -198,6 +193,9 @@
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="jWritePublicKey">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jWritePublicKeyActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel6">
       <Properties>

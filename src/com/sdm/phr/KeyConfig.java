@@ -8,6 +8,8 @@ public class KeyConfig {
     private String patientWriteMasterKeyPath = null;
     private String patientReadPublicKeyPath = null;
     private String patientWritePublicKeyPath = null;
+    private String patientReadSecretKeyPath = null;
+    private String patientWriteSecretKeyPath = null;
     private String userReadSecretKeyPath = null;
     private String userWriteSecretKeyPath = null;
     private int patientId;
@@ -20,6 +22,9 @@ public class KeyConfig {
         patientWriteMasterKeyPath = keyPath + File.separator + "master_write.key";
         patientReadPublicKeyPath = keyPath + File.separator + "public_read.key";
         patientWritePublicKeyPath = keyPath + File.separator + "public_write.key";
+        patientWritePublicKeyPath = keyPath + File.separator + "public_write.key";
+        patientReadSecretKeyPath = keyPath + File.separator + "secret_read.key";
+        patientWriteSecretKeyPath = keyPath + File.separator + "secret_write.key";
     }
     public static KeyConfig getInstance(){
         return instance;
@@ -88,4 +93,22 @@ public class KeyConfig {
     public void setUserWriteSecretKeyPath(String userWriteSecretKeyPath) {
         this.userWriteSecretKeyPath = userWriteSecretKeyPath;
     }
+
+    public String getPatientReadSecretKeyPath() {
+        return patientReadSecretKeyPath;
+    }
+
+    public void setPatientReadSecretKeyPath(String patientReadSecretKeyPath) {
+        this.patientReadSecretKeyPath = patientReadSecretKeyPath;
+    }
+
+    public String getPatientWriteSecretKeyPath() {
+        return patientWriteSecretKeyPath;
+    }
+
+    public void setPatientWriteSecretKeyPath(String patientWriteSecretKeyPath) {
+        this.patientWriteSecretKeyPath = patientWriteSecretKeyPath;
+    }
+    
+    
 }

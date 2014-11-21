@@ -2,9 +2,9 @@ package com.sdm.phr.gui;
 
 import com.sdm.phr.CryptoUtil;
 import com.sdm.phr.DatabaseClient;
+import com.sdm.phr.KeyConfig;
+import com.sdm.phr.Session;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Map;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
@@ -69,6 +69,7 @@ public class LoginPanel extends javax.swing.JPanel {
 
         jLabel1.setText("Name");
 
+        jFullName.setText("Yazan");
         jFullName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jFullNameActionPerformed(evt);
@@ -87,7 +88,7 @@ public class LoginPanel extends javax.swing.JPanel {
 
         jLabel3.setText("Read Secret Key");
 
-        jReadSecretKey.setText("N/A");
+        jReadSecretKey.setText("/home/phoenix/Desktop/Yazan_read.key");
 
         btnReadSecretKeyBrowser.setText("Browse");
         btnReadSecretKeyBrowser.addActionListener(new java.awt.event.ActionListener() {
@@ -131,7 +132,7 @@ public class LoginPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(57, 57, 57)
+                .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -140,7 +141,7 @@ public class LoginPanel extends javax.swing.JPanel {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,13 +153,13 @@ public class LoginPanel extends javax.swing.JPanel {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(jWriteSecretKey, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jFullName, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jOrgnCombo, javax.swing.GroupLayout.Alignment.LEADING, 0, 164, Short.MAX_VALUE)
-                                    .addComponent(jReadSecretKey, javax.swing.GroupLayout.Alignment.LEADING))
+                                    .addComponent(jOrgnCombo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jReadSecretKey, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(btnReadSecretKeyBrowser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(btnWriteSecretKeyBrowser))))))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -221,14 +222,24 @@ public class LoginPanel extends javax.swing.JPanel {
 
         String readSecretKeyChecksum = CryptoUtil.getFileChecksum(readSecretKeyPath, "SHA1");
         String writeSecretKeyChecksum = CryptoUtil.getFileChecksum(writeSecretKeyPath, "SHA1");
-        System.out.println(readSecretKeyChecksum + "," + writeSecretKeyChecksum);
-        System.out.println("-------------------");
+
         boolean isValidUser = DatabaseClient.getInstance().validateUserLogin(fullName, orgnId, readSecretKeyChecksum, writeSecretKeyChecksum);
         if (isValidUser) {
             JOptionPane.showMessageDialog(null, "Login successful", "Login Successful", JOptionPane.INFORMATION_MESSAGE);
+
+            //set session
+            Session.getInstance().setUserName(fullName);
+            Session.getInstance().setOrgnId(orgnId);
+            Session.getInstance().setOrgnName(orgnName);
+
+            // set the key file in key config
+            KeyConfig.getInstance().setUserSecretReadKeyPath(readSecretKeyPath);
+            KeyConfig.getInstance().setUserWriteSecretKeyPath(writeSecretKeyPath);
+
+            parent.userHomePanel.update();
             parent.nextPanel(Main.USER_HOME);
         } else {
-            JOptionPane.showMessageDialog(null, "Check full name, organization, or secret key, and try again", "Login Failure", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Check name, organization, and/or secret keys, and try again", "Login Failure", JOptionPane.ERROR_MESSAGE);
         }
 
     }//GEN-LAST:event_btnLoginActionPerformed
@@ -252,7 +263,7 @@ public class LoginPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jFullNameFocusLost
 
     private void jFullNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFullNameFocusGained
-         if(orgnMap==null){
+        if (orgnMap == null) {
             updateOrgnList();
         }
     }//GEN-LAST:event_jFullNameFocusGained

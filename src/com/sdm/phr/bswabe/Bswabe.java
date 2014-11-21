@@ -276,8 +276,7 @@ public class Bswabe {
 
 		checkSatisfy(cph.p, prv);
 		if (!cph.p.satisfiable) {
-			System.err
-					.println("cannot decrypt, attributes in key do not satisfy policy");
+			System.err.println("cannot decrypt, attributes in key do not satisfy policy");
 			beb.e = null;
 			beb.b = false;
 			return beb;

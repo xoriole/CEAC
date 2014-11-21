@@ -1,46 +1,48 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.sdm.phr.gui;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class Main extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    private JPanel cardPanel, jp1, jp2, buttonPanel;
-    private JLabel jl1, jl2;
-    private JButton btn1, btn2;
+    private JPanel cardPanel;
 
     private CardLayout cardLayout = new CardLayout();
+
+    public FirstScreen firstScreen;
+    public PatientRegister patientRegisterPanel;
+    public PatientLoginPanel patientLoginPanel;
+    public AddUser addUserPanel;
+    public LoginPanel loginPanel;
+    public HomePanel homePanel;
+    public PatientHome patientHomePanel;
+    public UserHomePanel userHomePanel;
 
     public Main() {
         setTitle("Patient Health Record System");
         setSize(800, 500);
+        setLocationRelativeTo(null);
         JDialog.setDefaultLookAndFeelDecorated(true);
 
         cardPanel = new JPanel();
         cardPanel.setLayout(cardLayout);
 
-        FirstScreen firstScreen = new FirstScreen(this);
-        PatientRegister patientRegisterPanel = new PatientRegister(this);
-        PatientLoginPanel patientLoginPanel = new PatientLoginPanel(this);
-        AddUser addUserPanel = new AddUser(this);
-        LoginPanel loginPanel = new LoginPanel(this);
-        HomePanel homePanel = new HomePanel(this);
-        PatientHome patientHomePanel = new PatientHome(this);
+        firstScreen = new FirstScreen(this);
+        patientRegisterPanel = new PatientRegister(this);
+        patientLoginPanel = new PatientLoginPanel(this);
+        addUserPanel = new AddUser(this);
+        loginPanel = new LoginPanel(this);
+        homePanel = new HomePanel(this);
+        patientHomePanel = new PatientHome(this);
+        userHomePanel = new UserHomePanel(this);
 
         cardPanel.add(firstScreen, Main.FIRST_SCREEN);
         cardPanel.add(patientRegisterPanel, Main.PATIENT_REGISTER);
         cardPanel.add(patientLoginPanel, Main.PATIENT_LOGIN);
         cardPanel.add(addUserPanel, Main.USER_ADDD);
         cardPanel.add(loginPanel, Main.USER_LOGIN);
-        cardPanel.add(homePanel, Main.USER_HOME);
+        cardPanel.add(userHomePanel, Main.USER_HOME);
         cardPanel.add(patientHomePanel, Main.PATIENT_HOME);
 
         add(cardPanel, BorderLayout.NORTH);
@@ -86,4 +88,5 @@ public class Main extends JFrame {
     public static String USER_LOGIN = "userLoginPanel";
     public static String PATIENT_HOME = "patientHomePanel";
     public static String USER_HOME = "userHomePanel";
+//    public static String USER_HOME = "userHomePanel";
 }

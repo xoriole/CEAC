@@ -16,6 +16,11 @@ public class ReaderDEI {
         CipherKeyPair output = dc.retrieveSection(patient_id, attribute);
         String result = decrypt(output);
     }
+    
+    public void getSection(String patient_id, String author_id) {
+        CipherKeyPair output = dc.retrieveSection(patient_id, attribute);
+        String result = decrypt(output);
+    }
 
     public String dec(String key, String w) {
         return null;

@@ -210,9 +210,9 @@ public class Cpabe {
 			plt = AESCoder.decrypt(beb.e.toBytes(), aesBuf);
 			return plt;
 		} else {
-			System.exit(0);
+//			System.exit(0);
+                        throw new IllegalAccessException("cannot decrypt, attributes in key do not satisfy policy");
+                                
 		}
-            return null;
 	}
-
 }
