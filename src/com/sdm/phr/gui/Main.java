@@ -84,5 +84,4 @@ public class Main extends JFrame {
     public static String USER_LOGIN = "userLoginPanel";
     public static String PATIENT_HOME = "patientHomePanel";
     public static String USER_HOME = "userHomePanel";
-//    public static String USER_HOME = "userHomePanel";
 }

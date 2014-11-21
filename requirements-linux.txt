@@ -46,3 +46,6 @@ $ sudo cp build/libjpbc-pbc.so /usr/local/lib/libjpbc-pbc.so
 Finally, install cpabe
 
 
+The database file for the project: phr.sql
+create a database name 'phr'
+import phr.sql

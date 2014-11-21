@@ -40,6 +40,7 @@ public class AESCoder {
         return decrypted;
     }
 
+    /* test methods 
     public static void main(String[] args) throws Exception {
         String key = "my key";
         String plainMsg = "Hello world.Hello world.Hello world.Hello world.Hello world.Hello world.Hello world.Hello world.";
@@ -59,4 +60,6 @@ public class AESCoder {
     public static String ba2str(byte[] ct) {
         return new String(ct);
     }
+    
+    */
 }
